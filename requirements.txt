@@ -13,3 +13,4 @@ pathspec~=0.12.1
 click~=8.1.7
 asgiref~=3.7.2
 sqlparse~=0.4.4
+djangorestframework~=3.14.0
