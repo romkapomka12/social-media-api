@@ -16,7 +16,7 @@ class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="posts",
+        related_name="posts"
     )
 
     def total_likes(self):
