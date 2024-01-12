@@ -6,11 +6,11 @@ from user.models import UserProfile
 class Post(models.Model):
     image = models.ImageField(blank=False, null=False)
     location = models.TextField(null=True)
-    description = models.TextField(null=True, max_length=144)
+    description = models.TextField(null=True, max_length=255)
     tag_people = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="tags", blank=True
     )
-    hash_tags = models.CharField(max_length=100, null=True, default=None)
+    hash_tags = models.CharField(max_length=100, blank=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(UserProfile, related_name="liked_posts", blank=True)
     author = models.ForeignKey(
@@ -24,6 +24,9 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["created_at"]
+
+    def __str__(self):
+        return str(self.created_at)
 
 
 class Discussion(models.Model):
