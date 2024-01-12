@@ -1,3 +1,4 @@
+from django.db import router
 from django.urls import path, include
 from rest_framework import routers
 
@@ -10,7 +11,7 @@ router.register("posts", PostViewSet)
 router.register("message", MessageViewSet)
 
 
-urlpatterns = [path("", include(router.urls))]
-
+urlpatterns = [
+    path("", include(router.urls))]
 
 app_name = "social_media"
