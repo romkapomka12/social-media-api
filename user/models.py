@@ -1,8 +1,10 @@
 import os
 import uuid
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
+from django.core.serializers import serialize
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
@@ -58,7 +60,7 @@ class UserProfile(AbstractUser):
     full_name = models.CharField(blank=True, null=True, max_length=150)
     my_location = models.CharField(max_length=60, blank=True)
     my_status = models.TextField(null=True, blank=True)
-    subscribers = models.ManyToManyField(
+    subscribers_to = models.ManyToManyField(
         "self",
         symmetrical=False,
         blank=True,
@@ -77,11 +79,14 @@ class UserProfile(AbstractUser):
 
     objects = UserManager()
 
-    class Meta:
-        ordering = ["username"]
+    @property
+    def subscribers(self):
+        data = get_user_model().objects.filter(subscribers_to=self)
+        serialized_data = serialize('json', data)
+        return serialized_data
 
-    def number_of_followers(self):
-        pass
+    @property
+    def subscribers_count(self):
+        subscribers = get_user_model().objects.filter(subscribers_to=self)
+        return subscribers.count()
 
-    def number_of_following(self):
-        pass
