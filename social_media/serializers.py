@@ -39,6 +39,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ["author"]
 
+
     def get_days_since_created(self, obj):
         days_passed = (date.today() - obj.created_at.date()).days
         if days_passed == 0:
@@ -56,13 +57,35 @@ class PostDetailSerializer(serializers.ModelSerializer):
         return representation
 
 
-
-
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("id", "username", "full_name", "profile_pic")
+        fields = ("id", "username", "full_name", "profile_pic",  "subscribers_count")
 
+
+class UserPostSerializer(UserListSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ("id", "profile_pic", "full_name", "username")
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    subscribes_to = UserListSerializer(many=True)
+    subscribers = UserListSerializer(many=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = (
+            "id",
+            "profile_pic",
+            "username",
+            "full_name",
+            "description",
+            "location",
+            "subscribers_count",
+            "subscribers",
+            "subscribers_to",
+        )
 
 class MessageListSerializer(serializers.ModelSerializer):
     class Meta:
